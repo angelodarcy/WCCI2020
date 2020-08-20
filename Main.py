@@ -1,6 +1,8 @@
 import csv
 
 
+
+
 import matplotlib.pyplot as plt
 from datetime import datetime
 import time
@@ -11,12 +13,21 @@ import seaborn as sns
 import scipy.cluster.hierarchy as hac
 from scipy.cluster.hierarchy import fcluster
 import math
-import plotly.plotly as py
+
+
+
+# import plotly.plotly as py
 from scipy.stats import zscore
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from sklearn import linear_model
 from random import uniform, randrange
+
+from sklearn.svm import SVR
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
 
 
 # Classe para manipulação e inserção de dados na estrutura
@@ -561,18 +572,23 @@ class estruturaDados:
                 # ------------------------------//------------------------------#
                 # Plot Cluter
                 DadosAux = DadosTreinamento.iloc[lista]
-                DadosPlot = DadosAux.T
+                # DadosPlot = DadosAux.T
+                DadosPlot = DadosAux
+                DadosAux.T.plot(alpha=0.5)
+
+
                 # DadosPlot.plot(legend=False, alpha = 0.5)
                 # DadosTestando.plot(legend=True, color='green', marker='o', label='Média',  linewidth=3)
 
-                fig = plt.figure()
-                ax = fig.add_subplot(1, 1, 1)
-                ax.plot(DadosPlot, alpha=0.5)
-                ax.plot(DadosTestando, color='green', marker='o', label='Average', linewidth=3)
-                ax.legend()
+                #fig = plt.figure()
+                #ax = fig.add_subplot(1, 1, 1)
+                #ax.plot(DadosPlot, alpha=0.5)
+                #ax.plot(DadosTestando, color='green', marker='o', label='Average', linewidth=3)
+                #ax.legend()
 
                 # DadosNorm.plot(y = lista, legend=False, alpha=0.5);
                 # DadosNorm[lista].T.mean().plot(legend=True, color='green', marker='o', label='Média',  linewidth=3)
+                plt.legend("")
                 plt.title('Cluster %d' % (i))
                 plt.xlabel('Time')
                 plt.ylabel('Normalized Return')
@@ -716,7 +732,8 @@ class estruturaDados:
 
 
             for dia in range(len(DadosTreinamento) - 24, len(DadosTreinamento)):
-                ganho = estruturaDados.SimulacaoEstrategia(dia, False, stoplossAux, DadosTreinamento, listaMedias, Representacao, parametrosNegociacaoModificador, Dados)
+                ganho = SimulacaoEstrategiaII(dia, False, stoplossAux, DadosTreinamento, listaMedias,Representacao, parametrosNegociacaoModificador, Dados)
+                #ganho = estruturaDados.SimulacaoEstrategia(dia, False, stoplossAux, DadosTreinamento, listaMedias, Representacao, parametrosNegociacaoModificador, Dados)
                 Fitness1 = Fitness1 + ganho[0]
             # print("Vetor Modificador:", Fitness1)
 
@@ -732,8 +749,9 @@ class estruturaDados:
 
             Fitness2 = 0
             for dia in range(len(DadosTreinamento) - 24, len(DadosTreinamento)):
+                ganho = SimulacaoEstrategiaII(dia, False, stoplossAux, DadosTreinamento, listaMedias, Representacao,parametrosNegociacaoModificador, Dados)
 
-                ganho = estruturaDados.SimulacaoEstrategia(dia, False, stoplossAux, DadosTreinamento, listaMedias, Representacao, parametrosNegociacaoAlvo, Dados)
+                #ganho = estruturaDados.SimulacaoEstrategia(dia, False, stoplossAux, DadosTreinamento, listaMedias, Representacao, parametrosNegociacaoAlvo, Dados)
                 Fitness2 = Fitness2 + ganho[0]
             # print("Vetor Alvo:", Fitness2)
 
